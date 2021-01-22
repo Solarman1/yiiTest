@@ -37,14 +37,17 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
+        
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'getaplles'               => 'apple/getapples',
+                'falltogroundapple'  => 'apple/falltogroundapple',
+                'eatapple'           => 'apple/eateapple',
+                'deleteapple'        => 'apple/deleteapple',
             ],
         ],
-        */
     ],
     'params' => $params,
 ];
