@@ -13,19 +13,18 @@ use yii\helpers\Html;
         <div class="row">
       
             <?php if(!empty($result)):?>
-                <?php foreach($result as $value):?>
-                    <?php foreach($value as $item):?>    
+                <?php foreach($result as $value):?> 
                 <div class="col-md-4">
                         <div class="card" style="width: 18rem;">
-                        <img class="card-img-top" src="/assets/images/apple.png" width="50" height="50" style="background-color:<?php $item['color']?>;">
+                        <img class="card-img-top" src="/assets/images/apple.png" width="50" height="50" style="background-color:<?= $value['color'] ?>;">
                         <div class="card-body">
-                            <h5 class="card-title"><?php $item['id']?></h5>
+                            <h5 class="card-title"></h5>
                             <p class="card-text"></p>
                         </div>
                         <ul class="list-group list-group-flush">
                         
                         <?= Html::beginForm(['/falltogroundapple'], 'post') ?>
-                        <input type="hidden" name="appleId" value="<?php // $result->id?>">
+                        <input type="hidden" name="appleId" value="<?= $value['id'] ?>">
                             <li class="list-group-item">  <button type="submit" class="btn btn-success">Сорвать с дерева</button></li>
                         <?= Html::endForm() ?>
                             
@@ -45,7 +44,7 @@ use yii\helpers\Html;
                         </div>
                         </div>
                     </div>
-                    <?php endforeach;?>
+      
                 <?php endforeach;?>  
             <?php endif ?>
             </div>

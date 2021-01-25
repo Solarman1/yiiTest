@@ -15,7 +15,7 @@ class m210122_153400_create_apples_table extends Migration
         $this->createTable('{{%apples}}', [
             'id' => $this->primaryKey(),
             'color' => $this->text(),
-            'createDate' => $this->timestamp(),
+            'createDate' => $this->dateTime(),
             'fallToGroundDate' => $this->dateTime(),
             'appleStatus' => $this->integer(),
             'eatingProcent' => $this->integer(),

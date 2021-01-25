@@ -53,11 +53,12 @@ class Apples extends \yii\db\ActiveRecord
 
     public function fallToGround($appleId)
     {
-        $this->findOne($appleId);
-        $this->fallToGroundDate = date('Y-m-d H:i:s', time());
-        $this->appleStatus      = 2;
+        $command = Yii::$app->db->createCommand()->update('apples', [
+            'fallToGroundDate'  => date('Y-m-d H:i:s', time()),
+            'AppleStatus'       => 2,
+        ], "id = $appleId")->execute();
 
-        return $this->update(false);
+        return $command;
     }
 
 
@@ -74,11 +75,11 @@ class Apples extends \yii\db\ActiveRecord
         $randomDate          = mt_rand(1, time());
         // print_r($crreateDate         = date($randomDate));
         // die();
-        $color              = $this->color              = $colors[mt_rand(0,3)];      
-        $cratedDate         = $this->createDate         = date('Y-m-d H:i:s', $randomDate);
-        $fallToGroundDate   = $this->fallToGroundDate   = null;
-        $appleStatus        = $this->appleStatus        = 1;
-        $eatingProcent      = $this->eatingProcent      = null;
+        $color              = $colors[mt_rand(0,3)];      
+        $cratedDate         = date('Y-m-d H:i:s', $randomDate);
+        $fallToGroundDate   = null;
+        $appleStatus        = 1;
+        $eatingProcent      = null;
 
         $command = Yii::$app->db->createCommand()->insert('apples', [
             'color'             => $color,

@@ -14,18 +14,8 @@ class AppleController extends Controller
         $apple = new Apples();
 
         $resultApple = $apple->getAll();
-        // foreach($resultApple as $value)
-        // {
-        //     foreach($value as $item)
-        //     {
-        //         print_r($item);
-        //     }
-           
-        // }
-       
-        // die();
-        return $this->render('apple', ['result' => $resultApple]);
-        
+
+        return $this->render('apple', ['result' => $resultApple]);     
     }
 
     public function actionGetapples()
@@ -37,12 +27,6 @@ class AppleController extends Controller
             $apple->generateApples();
             //print_r('iterat');
         }
-        // foreach($resultApple as $value)
-        // {
-        //     print_r($value['color']);
-        // }
-        // print_r($resultApple);
-        // die();
 
         return $this->actionIndex();
     }
@@ -57,7 +41,7 @@ class AppleController extends Controller
             // die(var_dump($appleId));
             // echo 'fall';
   
-       
+        return $this->actionIndex();
     }
 
     public function actionEateapple()
