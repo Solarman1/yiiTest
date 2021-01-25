@@ -42,7 +42,8 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'getaplles'               => 'apple/getapples',
+                'apples'             => 'apple/index',
+                'getaplles'          => 'apple/getapples',
                 'falltogroundapple'  => 'apple/falltogroundapple',
                 'eatapple'           => 'apple/eateapple',
                 'deleteapple'        => 'apple/deleteapple',

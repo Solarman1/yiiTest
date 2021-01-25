@@ -51,28 +51,50 @@ class Apples extends \yii\db\ActiveRecord
         ];
     }
 
+    public function fallToGround($appleId)
+    {
+        $this->findOne($appleId);
+        $this->fallToGroundDate = date('Y-m-d H:i:s', time());
+        $this->appleStatus      = 2;
+
+        return $this->update(false);
+    }
 
 
     public static function getAll()
     {
-        return Apples::find()->all();
+       // return Apples::find()->orderBy(['id'=> SORT_DESC])->one();
+       return Apples::find()->all();
     }
 
     public function generateApples()
     {
-        $colors              = ['red', 'greend', 'yellow', 'brown'];
+        
+        $colors              = ['red', 'green', 'yellow', 'brown'];
         $randomDate          = mt_rand(1, time());
         // print_r($crreateDate         = date($randomDate));
         // die();
-        $this->color              = $colors[mt_rand(0,3)];      
-        $this->createDate         = date('Y-m-d H:i:s', $randomDate);
-        $this->fallToGroundDate   = null;
-        $this->appleStatus        = ['1', '2', '3'];
-        $this->eatingProcent      = null;
+        $color              = $this->color              = $colors[mt_rand(0,3)];      
+        $cratedDate         = $this->createDate         = date('Y-m-d H:i:s', $randomDate);
+        $fallToGroundDate   = $this->fallToGroundDate   = null;
+        $appleStatus        = $this->appleStatus        = 1;
+        $eatingProcent      = $this->eatingProcent      = null;
 
-        //$command = Yii::$app->db->createCommand('INSERT ');
+        $command = Yii::$app->db->createCommand()->insert('apples', [
+            'color'             => $color,
+            'createDate'        => $cratedDate,
+            'fallToGroundDate'  => $fallToGroundDate,
+            'AppleStatus'       => $appleStatus,
+            'EatingProcent'     => $eatingProcent,
+            ])->execute();
 
-        return $this->save(false);
+        // Yii::$app->db->transaction(function($db) {
+        //     $db->createCommand($sql1)->execute();
+        //     $db->createCommand($sql2)->execute();
+        //     // ... executing other SQL statements ...
+        // });
+        
+        return  $command;
     }
 
 }
