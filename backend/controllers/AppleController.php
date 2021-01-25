@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use Yii;
 use yii\web\Controller;
+use backend\models\Apples;
 
 class AppleController extends Controller
 {
@@ -14,6 +15,8 @@ class AppleController extends Controller
 
     public function actionGetapples()
     {
+        $apple = new Apples();
+        $apple->generateApples();
         echo 'get';
     }
     
