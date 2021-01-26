@@ -61,6 +61,37 @@ class Apples extends \yii\db\ActiveRecord
         return $command;
     }
 
+    public function getSize($appleId)
+    {
+        // return  Apples::find('EatingProcent')
+        //                 ->where(['id' => $appleId])
+        //                 ->one();
+        $params = [':id' => $appleId];
+
+        return  $post = Yii::$app->db->createCommand('SELECT EatingProcent FROM apples WHERE id=:id')
+                        ->bindValues($params)
+                        ->queryOne();
+    }
+
+    public function updateSize($appleId, $procent)
+    {
+        // print_r($procent);
+        // die();
+        // print_r($procent);
+        // var_dump($procent);
+        //die();
+        $command = Yii::$app->db->createCommand()->update('apples', [
+            'EatingProcent'  => $procent,
+        ], "id = $appleId")->execute();
+        if($command)
+            return $command;
+        else
+        {
+            die('this');
+        }
+        
+    }
+
 
     public static function getAll()
     {
@@ -79,7 +110,7 @@ class Apples extends \yii\db\ActiveRecord
         $cratedDate         = date('Y-m-d H:i:s', $randomDate);
         $fallToGroundDate   = null;
         $appleStatus        = 1;
-        $eatingProcent      = null;
+        $eatingProcent      = 1;
 
         $command = Yii::$app->db->createCommand()->insert('apples', [
             'color'             => $color,
@@ -96,6 +127,11 @@ class Apples extends \yii\db\ActiveRecord
         // });
         
         return  $command;
+    }
+
+    public function deleteApple($appleId)
+    {
+        return Yii::$app->db->createCommand()->delete('apples', "id = $appleId")->execute();
     }
 
 }

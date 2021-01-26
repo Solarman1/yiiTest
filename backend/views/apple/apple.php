@@ -11,15 +11,32 @@ use yii\helpers\Html;
 <div class="album py-5 bg-light">
     <div class="container">
         <div class="row">
-      
+        <?php if (Yii::$app->session->hasFlash('eatingStatus')): ?>
+            <p><?= Yii::$app->session->getFlash('eatingStatus') ?></p>
+        <?php endif; ?>
+
             <?php if(!empty($result)):?>
                 <?php foreach($result as $value):?> 
                 <div class="col-md-4">
                         <div class="card" style="width: 18rem;">
                         <img class="card-img-top" src="/assets/images/apple.png" width="50" height="50" style="background-color:<?= $value['color'] ?>;">
                         <div class="card-body">
-                            <h5 class="card-title"></h5>
-                            <p class="card-text"></p>
+                        <?php if ($value['appleStatus'] != 1 && $value['appleStatus'] != 3): ?>
+                            <h5 class="card-title">Яблоко можно кушать</h5>
+                        <?php endif; ?>
+
+                        <?php if ($value['appleStatus'] == 1): ?>
+                            <h5 class="card-title">Яблоко висит на дереве</h5>
+                        <?php endif; ?>
+
+                        <?php if ($value['appleStatus'] == 3): ?>
+                            <h5 class="card-title">Яблоко гнилое</h5>
+                        <?php endif; ?>
+                            
+                            
+                            <?php if($value['eatingProcent']): ?>
+                                <p class="card-text">Сколько можно съесть -> <?= $value['eatingProcent'] ?></p>
+                            <?php endif; ?>
                         </div>
                         <ul class="list-group list-group-flush">
                         
@@ -32,9 +49,14 @@ use yii\helpers\Html;
                             
                             <li class="list-group-item">
                                 <div class="input-group mb-3">
-                                    <button id="button-addon1" type="button" class="btn btn-info btn-outline-secondary">Откусить</button>
-                                    <label for="procentInput">Сколько процентов откусить?</label>
-                                    <input id="procentInput" type="text" class="form-control" aria-describedby="button-addon1">
+                                <?= Html::beginForm(['/eatapple'], 'post') ?>
+                                        <button id="button-addon1" type="submit" class="btn btn-info btn-outline-secondary">Откусить</button>
+                                        <label for="procentInput">Сколько процентов откусить?</label>
+                                        <input id="procentInput" name="procent" type="text" class="form-control" aria-describedby="button-addon1">
+                                        <input type="hidden" name="appleId" value="<?= $value['id'] ?>"> 
+                                        <input type="hidden" name="appleSize" value="<?= $value['eatingProcent'] ?>">
+                                        <input type="hidden" name="status" value="<?= $value['appleStatus'] ?>">
+                                    <?= Html::endForm() ?>
                                 </div>
                             </li>
                             <li class="list-group-item"> <button type="button" class="btn btn-warning">Удалить</button></li>

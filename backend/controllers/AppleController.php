@@ -25,7 +25,6 @@ class AppleController extends Controller
         for($i = 0; $i < mt_rand(3,12); $i++)
         {
             $apple->generateApples();
-            //print_r('iterat');
         }
 
         return $this->actionIndex();
@@ -37,20 +36,55 @@ class AppleController extends Controller
 
         $appleId = Yii::$app->request->post('appleId');
 
-        $apple-> fallToGround($appleId);
-            // die(var_dump($appleId));
-            // echo 'fall';
+        if($apple->fallToGround($appleId))
+        {
+            Yii::$app->session->setFlash('fallenStatus', "Яблоко сорвано, можно есть");
+        }
+        else
+            Yii::$app->session->setFlash('fallenStatus', "Яблоко не сорвано");
   
         return $this->actionIndex();
     }
 
     public function actionEateapple()
     {
-        echo 'update';
+        $apple      = new Apples();
+        $status     = Yii::$app->request->post('status');
+        $procent    = Yii::$app->request->post('procent');
+        $appleId    = Yii::$app->request->post('appleId');
+        $appleSize  = Yii::$app->request->post('appleSize');
+
+        if($status != 1 && $status != 3)
+        {
+            $eatingProcent = $appleSize - ($appleSize * ($procent / 100));
+            // print_r( $eatingProcent);
+            // die();
+            $eatingProcent  = $apple->updateSize($appleId, $eatingProcent);
+            $currentProcent = $apple->getSize($appleId);
+            // var_dump( $currentProcent['EatingProcent']);
+            // die();
+            $procent = $currentProcent['EatingProcent'];
+            Yii::$app->session->setFlash('eatingStatus', "Осталось скушать -> $procent");
+        }
+        else
+        {
+            switch($status)
+            {
+                case 1:
+                    Yii::$app->session->setFlash('eatingStatus', "Висит на дереве нельзя кушать");
+                    break;
+                case 3:
+                    Yii::$app->session->setFlash('eatingStatus', "Яблоко гнилое");
+                    break;
+            }
+        }
+
+
+        return $this->actionIndex();
     }
 
     public function actionDeleteapple()
     {
-        echo 'dell';
+        return $this->actionIndex();
     }
 }
