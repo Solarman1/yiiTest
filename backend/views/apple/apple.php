@@ -1,5 +1,8 @@
 <?php
+
+
 use yii\helpers\Html;
+use yii\bootstrap\ActiveForm;
 ?>
 
 <form action="/getaplles">
@@ -49,17 +52,25 @@ use yii\helpers\Html;
                             
                             <li class="list-group-item">
                                 <div class="input-group mb-3">
-                                <?= Html::beginForm(['/eatapple'], 'post') ?>
+                            
+                                <?php $form = ActiveForm::begin([
+                                    'method' => 'post',
+                                    'action' => ['/eatapple'],
+                                    'options' => ['class' => 'form-horizontal'],
+                                ]) ?>
                                         <button id="button-addon1" type="submit" class="btn btn-info btn-outline-secondary">Откусить</button>
                                         <label for="procentInput">Сколько процентов откусить?</label>
-                                        <input id="procentInput" name="procent" type="text" class="form-control" aria-describedby="button-addon1">
+                                        <?= $form->field($model, 'eatingProcent') ?>
+
                                         <input type="hidden" name="appleId" value="<?= $value['id'] ?>"> 
                                         <input type="hidden" name="appleSize" value="<?= $value['eatingProcent'] ?>">
                                         <input type="hidden" name="status" value="<?= $value['appleStatus'] ?>">
-                                    <?= Html::endForm() ?>
+                                <?php ActiveForm::end() ?>
                                 </div>
                             </li>
-                            <li class="list-group-item"> <button type="button" class="btn btn-warning">Удалить</button></li>
+                            <form action="/deleteapple/<?= $value['id']?>" method="get">
+                                <li class="list-group-item"> <button type="submit" class="btn btn-warning">Удалить</button></li>
+                            </form>
                         </ul>
                         <div class="card-body">
 

@@ -15,7 +15,10 @@ class AppleController extends Controller
 
         $resultApple = $apple->getAll();
 
-        return $this->render('apple', ['result' => $resultApple]);     
+        return $this->render('apple', [
+            'result' => $resultApple,
+            'model'  => $apple
+            ]);     
     }
 
     public function actionGetapples()
@@ -50,49 +53,57 @@ class AppleController extends Controller
     {
         $apple      = new Apples();
         $status     = Yii::$app->request->post('status');
-        $procent    = Yii::$app->request->post('procent');
         $appleId    = Yii::$app->request->post('appleId');
         $appleSize  = Yii::$app->request->post('appleSize');
+        $procent    = $apple->load(\Yii::$app->request->post());
+      
+        $fallDate = $apple->getFallenDate($appleId);
 
-        if($status != 1 && $status != 3)
+        $fallenDate = date_create($fallDate['fallToGroundDate']);
+        $curDate    = date_create(date('Y-m-d H:i:s'));
+
+        $interval = date_diff($fallenDate, $curDate);
+        $difHours = $interval->format('%h');
+        if($difHours == '5')
         {
-            $eatingProcent = $appleSize - ($appleSize * ($procent / 100));
-            if($appleSize == 0)
-                return $this->actionDeleteapple($appleId);
+            $apple->updateStatus($appleId, 3);
+        }
+
+        if($apple->validate()) 
+        {
+            if($status != 1 && $status != 3)
+            {
+              
+                $eatingProcent  = $apple->updateSize($appleId, $appleSize);
+                $currentProcent = $apple->getSize($appleId);
+
+
+
+                Yii::$app->session->setFlash('eatingStatus', "Осталось скушать -> $procent");                           
+            }
             else
             {
-                if($procent > 100)
-                    Yii::$app->session->setFlash('eatingStatus', "Вы пытаетесь откусить больше чем возможно -> $procent");
-                else
+                switch($status)
                 {
-                    $eatingProcent  = $apple->updateSize($appleId, (float)$eatingProcent);
-                    $currentProcent = $apple->getSize($appleId);
-
-                    $procent = $currentProcent['EatingProcent'];
-                    Yii::$app->session->setFlash('eatingStatus', "Осталось скушать -> $procent");
-                    
-                } 
-            }      
-        }
-        else
-        {
-            switch($status)
-            {
-                case 1:
-                    Yii::$app->session->setFlash('eatingStatus', "Висит на дереве нельзя кушать");
-                    break;
-                case 3:
-                    Yii::$app->session->setFlash('eatingStatus', "Яблоко гнилое");
-                    break;
+                    case 1:
+                        Yii::$app->session->setFlash('eatingStatus', "Висит на дереве нельзя кушать");
+                        break;
+                    case 3:
+                        Yii::$app->session->setFlash('eatingStatus', "Яблоко гнилое");
+                        break;
+                }
             }
+        } 
+        else 
+        {
+            $errors = $apple->errors;
         }
-
-
         return $this->actionIndex();
     }
 
     public function actionDeleteapple($appleId)
-    {   $apple = new Apples();
+    {   
+        $apple = new Apples();
 
         if($apple->deleteApple($appleId))
         {

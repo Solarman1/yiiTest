@@ -46,7 +46,7 @@ return [
                 'getaplles'          => 'apple/getapples',
                 'falltogroundapple'  => 'apple/falltogroundapple',
                 'eatapple'           => 'apple/eateapple',
-                'deleteapple'        => 'apple/deleteapple',
+                'deleteapple/<appleId:\d+>'  => 'apple/deleteapple',
             ],
         ],
     ],
