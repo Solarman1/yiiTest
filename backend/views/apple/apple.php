@@ -22,7 +22,7 @@ use yii\bootstrap\ActiveForm;
                 <?php foreach($result as $value):?> 
                 <div class="col-md-4">
                         <div class="card" style="width: 18rem;">
-                        <img class="card-img-top" src="/assets/images/apple.png" width="50" height="50" style="background-color:<?= $value['color'] ?>;">
+                        <img class="card-img-top" src="/apple.png" width="50" height="50" style="background-color:<?= $value['color'] ?>;">
                         <div class="card-body">
                         <?php if ($value['appleStatus'] != 1 && $value['appleStatus'] != 3): ?>
                             <h5 class="card-title">Яблоко можно кушать</h5>
