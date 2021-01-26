@@ -75,21 +75,18 @@ class Apples extends \yii\db\ActiveRecord
 
     public function updateSize($appleId, $procent)
     {
-        // print_r($procent);
-        // die();
-        // print_r($procent);
-        // var_dump($procent);
-        //die();
         $command = Yii::$app->db->createCommand()->update('apples', [
             'EatingProcent'  => $procent,
         ], "id = $appleId")->execute();
-        if($command)
-            return $command;
-        else
+
+        if($this->getSize($appleId) == 0)
         {
             die('this');
+           return $this->deleteApple($appleId);
         }
-        
+            
+
+        return $command ? $command : 0;     
     }
 
 
@@ -104,8 +101,7 @@ class Apples extends \yii\db\ActiveRecord
         
         $colors              = ['red', 'green', 'yellow', 'brown'];
         $randomDate          = mt_rand(1, time());
-        // print_r($crreateDate         = date($randomDate));
-        // die();
+
         $color              = $colors[mt_rand(0,3)];      
         $cratedDate         = date('Y-m-d H:i:s', $randomDate);
         $fallToGroundDate   = null;

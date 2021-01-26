@@ -57,14 +57,22 @@ class AppleController extends Controller
         if($status != 1 && $status != 3)
         {
             $eatingProcent = $appleSize - ($appleSize * ($procent / 100));
-            // print_r( $eatingProcent);
-            // die();
-            $eatingProcent  = $apple->updateSize($appleId, $eatingProcent);
-            $currentProcent = $apple->getSize($appleId);
-            // var_dump( $currentProcent['EatingProcent']);
-            // die();
-            $procent = $currentProcent['EatingProcent'];
-            Yii::$app->session->setFlash('eatingStatus', "Осталось скушать -> $procent");
+            if($appleSize == 0)
+                return $this->actionDeleteapple($appleId);
+            else
+            {
+                if($procent > 100)
+                    Yii::$app->session->setFlash('eatingStatus', "Вы пытаетесь откусить больше чем возможно -> $procent");
+                else
+                {
+                    $eatingProcent  = $apple->updateSize($appleId, (float)$eatingProcent);
+                    $currentProcent = $apple->getSize($appleId);
+
+                    $procent = $currentProcent['EatingProcent'];
+                    Yii::$app->session->setFlash('eatingStatus', "Осталось скушать -> $procent");
+                    
+                } 
+            }      
         }
         else
         {
@@ -83,8 +91,15 @@ class AppleController extends Controller
         return $this->actionIndex();
     }
 
-    public function actionDeleteapple()
-    {
-        return $this->actionIndex();
+    public function actionDeleteapple($appleId)
+    {   $apple = new Apples();
+
+        if($apple->deleteApple($appleId))
+        {
+            Yii::$app->session->setFlash('eatingStatus', "Вы съели яблоко");         
+            return $this->actionIndex();
+        }
+        else
+            return 0;
     }
 }
